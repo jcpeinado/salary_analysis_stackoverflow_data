@@ -299,6 +299,32 @@
         "Decision": "Reject H0"
       }
     ],
+    "q3_anova_results": [
+      {
+        "Group": "Ordinary ANOVA (primary)",
+        "F": 17.496593804540815,
+        "Numerator df": 2,
+        "Denominator df": 4360.0,
+        "p-value": "2.702e-08",
+        "Decision": "Reject H0"
+      },
+      {
+        "Group": "Welch ANOVA (robustness)",
+        "F": 12.206487726988485,
+        "Numerator df": 2,
+        "Denominator df": 696.6768388868455,
+        "p-value": "6.16e-06",
+        "Decision": "Reject H0"
+      },
+      {
+        "Group": "IQR-restricted ANOVA (sensitivity)",
+        "F": 32.17274765856014,
+        "Numerator df": 2,
+        "Denominator df": 4134.0,
+        "p-value": "1.365e-14",
+        "Decision": "Reject H0"
+      }
+    ],
     "satisfaction_by_title": [
       {
         "Group": "Support engineer or analyst",
@@ -690,6 +716,10 @@
     "q3_levene": {
       "statistic": 10.853051669995203,
       "pvalue": 1.987346292919618e-05
+    },
+    "trimmed_anova": {
+      "statistic": 32.17274765856014,
+      "pvalue": 1.365142795838767e-14
     },
     "bootstrap_means_t": {
       "statistic": 255.54198429408643,

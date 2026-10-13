@@ -31,11 +31,11 @@ def plain(x):
 def frame(df):
  df=df.copy();df.index.name='Group'
  return plain(df.reset_index().to_dict(orient='records'))
-table_names=['q2_descriptives','q2_outliers','q2_sensitivity','q2_t_comparison','q2_cis','q2_median_tests','contingency','q3_descriptives','q3_outliers','q3_sensitivity','q3_mean_tests','satisfaction_by_title','salary_by_title','sat_sensitivity']
+table_names=['q2_descriptives','q2_outliers','q2_sensitivity','q2_t_comparison','q2_cis','q2_median_tests','contingency','q3_descriptives','q3_outliers','q3_sensitivity','q3_mean_tests','q3_anova_results','satisfaction_by_title','salary_by_title','sat_sensitivity']
 tables={name:frame(ns[name]) for name in table_names if name in ns}
 scalars={k:plain(v) for k,v in ns.items() if isinstance(v,(int,float,np.integer,np.floating)) and k not in ['i','observed','direct_t','direct_f','draw_sp2','shortcut_t','direct_median_gap','check_grand','check_within','shortcut_f']}
 tests={}
-for name in ['student','welch','mood','anova','q2_levene','q3_levene','bootstrap_means_t','bootstrap_means_anova']:
+for name in ['student','welch','mood','anova','q2_levene','q3_levene','trimmed_anova','bootstrap_means_t','bootstrap_means_anova']:
  if name in ns:
   obj=ns[name];tests[name]={k:plain(getattr(obj,k)) for k in ['statistic','pvalue','df','median'] if hasattr(obj,k)}
 for name in ['q2_boot_test','q2_median_boot_test','q3_boot_test']:tests[name]=plain(ns[name])
