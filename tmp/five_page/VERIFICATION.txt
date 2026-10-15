@@ -1,0 +1,8 @@
+Final report: reports/peinado_1012953314_assignment1_final_5pages.docx
+Baseline: reports/peinado_1012953314_assignment1_revised.docx (not modified).
+Word ComputeStatistics and page collection both returned 5 pages.
+All five native Word page renders reviewed, including complete headers and footers.
+Four numeric tables match notebook-generated report_content.json exactly.
+Nine numbered figures use the filtered notebook calculation arrays.
+PDF ExportAsFixedFormat stalled; native Word page-metafile rendering completed successfully.
+The delivered final artifact is the editable DOCX, not the prior six-page PDF.
