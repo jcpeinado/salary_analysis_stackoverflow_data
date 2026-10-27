@@ -1,0 +1,160 @@
+ 
+Julian Peinado · 1012953314  |  1 
+Developer compensation and statistical uncertainty  
+MIE1624 · Assignment 1 | Julian Peinado · 1012953314  
+Introduction to Data Science, Analytics, and AI · Fall 2026 
+Q1 Exploratory data analysis 
+How does developer pay vary with work arrangement and education? In the selected sample, remote respondents earn 
+more at both the mean and median, while US/Canada degree groups differ in average pay. The question is how robust 
+these patterns are to salary extremes and statistical uncertainty. 
+Study Population and Sample Selection Criteria 
+To focus the study on workforce participation, I exclude DevType = “Retired” and recorded Age >80 before all analyses. 
+These researcher-defined scope decisions reflect engineering judgment, not data cleaning or evidence that older people 
+are outliers; age 80 remains eligible. Of 20,407 original rows, 2 retired and 93 older respondents are excluded, with no 
+overlap, leaving 20,312. Both retired records also say Employed, so the explicit DevType classification governs. 
+Retirement exclusion does not establish active employment: 321 students and 58 respondents marked Not employed 
+remain. Supplementary paid-work responses support self-reported participation, not independent verification. The 10 
+missing ages remain outside the age plot, so the ceiling cannot be verified for every respondent. 
+Within this population, satisfaction analysis omits 3,428 missing ratings and one value of 60, using a working scale of 0–
+10. Each row has one supplied job category. All eligible salary extremes remain in the primary analyses. 
+ 
+Figures 1–2 show the lowest two and highest three means; the notebook covers all 31 retained titles. Senior executives lead 
+satisfaction (8.12/10, n=168). Financial analysts/engineers average $501,248 (n=46), against a median of $87,248.50: an immediate 
+warning that a high mean can reflect a small upper tail. 
+ 
+Figure 3 retains salaries from $102 to $33.55 million on a log axis. Three recorded ages below 15 remain flagged in the notebook; their 
+validity and the age-cleaning history are uncertain. These diagnostics cause no further salary exclusions. 
+
+ 
+Julian Peinado · 1012953314  |  2 
+Q2 Hybrid and remote salaries 
+Q2(a): Descriptive statistics and outliers 
+The first comparison asks whether work arrangement is associated with pay. Exact labels Remote and Hybrid retain 
+14,664 respondents; 5,648 other eligible respondents are outside Q2. Positive Remote − Hybrid differences indicate 
+higher remote pay. 
+Table 1. Original salaries. SD describes individual salary dispersion; all amounts are USD. 
+Group n Mean Median SD 
+Remote 6,888 118,666.90 90,491.00 444,251.01 
+Hybrid 7,776 101,422.99 77,730.00 346,625.92 
+The middle half of salaries spans $47,566.00–$150,000.00 for Remote and $47,492.25–$116,015.00 for Hybrid. Minimum 
+values are $102.00 and $104.00. 
+The largest Hybrid and Remote salaries are $18,387,548.00 and $33,552,715.00, contributing 2.33% and 4.10% of their 
+group salary totals. Size alone does not establish an error, so these remain in the selected population. 
+A separate sensitivity check uses each group’s Q1 − 1.5×IQR and Q3 + 1.5×IQR fences. Upper limits are $303,651.00 and 
+$218,799.12; both lower limits are negative. It removes 204 and 400, leaving 6,684 and 7,376. Means become 
+$98,554.14 and $79,849.19; the gap is $18,704.95 (pooled p=2.364e-79). These truncated distributions answer a 
+different question; the primary analyses retain salary extremes. 
+Q2(b): Two-sided pooled t-test 
+Is the mean gap consistent with equal population means? I test H₀: μR − μH = 0 against H₁: μR − μH ≠ 0 at α=0.05. Sample 
+variances, using n−1, are 197,358,671,571.47 and 120,149,529,197.14 USD². The pooled calculation is: 
+𝑠ₚ² =  [(𝑛𝑅 −  1)𝑠𝑅² +  (𝑛𝐻 −  1)𝑠𝐻²] / (𝑛𝑅 +  𝑛𝐻 −  2) 
+𝑆𝐸 =  𝑠ₚ√(1/𝑛𝑅 +  1/𝑛𝐻);    𝑡 =  (𝑥̄ 𝑅 −  𝑥̄ 𝐻) / 𝑆𝐸 
+Here n is group size, x̄ the mean, s² sample variance and sₚ pooled SD. Results are sₚ=$395,494.83 and SE=$6,543.99. SE 
+describes uncertainty in the gap; SD describes variation between individuals.  
+Table 2. Original-data tests of Remote − Hybrid. 
+Method t df Two-sided p 
+Manual pooled 2.63508 14,662 0.008421 
+SciPy pooled 2.63508 14,662 0.008421 
+Welch supplement 2.59655 12,975.28 0.009427 
+Manual and built-in results agree and reject H₀ at 0.05. The $17,243.91 gap is 17.0% of the Hybrid mean, but this test 
+cannot explain why it exists. 
+Independence is unverified, and skew may weaken normal approximations. The variance ratio is 1.64 (median-centered 
+Levene p=0.01435). Welch’s test allows unequal variances and also rejects. A p-value is not the probability that H₀ is 
+true. 
+ 
+Julian Peinado · 1012953314  |  3 
+Q2(c): Bootstrap analysis 
+Bootstrapping offers a second view of uncertainty. Within each group, I resample with replacement, retaining 6,888 
+Remote and 7,776 Hybrid salaries per draw. With 10,000 replications, seed 16242026 and separate named NumPy 
+streams, the mean SEs are $5,362.02 and $3,890.15; the difference SE is $6,605.63. These describe uncertainty in means, 
+not dispersion between individual salaries. 
+ 
+Figures 4–6 move from bootstrap means to Remote − Hybrid differences and standardized differences. Vertical axes show probability 
+density; Figure 5 marks zero. All simulated ranges are retained. 
+𝛥∗  =  𝑥̄ 𝑅
+∗  −  𝑥̄ 𝐻
+∗ ;    𝑧 =  (𝛥∗  −  𝑚𝑒𝑎𝑛(𝛥∗)) / 𝑆𝐷(𝛥∗) 
+Figure 6 subtracts the bootstrap mean and divides by the sample SD, using B − 1. Its mean is therefore zero and its SD 
+one. This standardization helps compare shapes but does not impose or test equal population means. 
+Q2(d): T-test using bootstrapped data 
+The required pooled t-test on two arrays of 10,000 unshifted bootstrap means gives t=258.685, df=19,998 and p below 
+floating-point resolution. It rejects, but simulations reuse the same respondents. The nominal SE falls as 1/√B; more 
+replications can reduce p without adding population evidence. 
+For a separate null test, each group is shifted to the combined mean, preserving shape and variance. Resamples retain 
+original sizes and recalculate the pooled SE. Comparing |T₀*|=|(Δ*−Δ̂)/SE*| with |2.63508| yields 50 extreme draws: 
+p=(50+1)/10,001=0.005099. This rejects under an approximate null calibration; empirical tails and simulation error affect 
+the result. 
+Q2(e): Confidence intervals for the mean difference 
+Table 3. 95% intervals for Remote − Hybrid (USD). 
+Method Lower Upper Width 
+Pooled t 4,416.88 30,070.95 25,654.07 
+Bootstrap percentile 5,247.87 31,125.76 25,877.88 
+Both 95% intervals exclude zero, supporting a positive mean gap. The pooled interval is $17,243.91 ± $12,827.04, using 
+t(0.975, 14,662). The bootstrap interval uses the 2.5th and 97.5th percentiles of unshifted differences; it is $223.81 wider 
+and asymmetric. Under their assumptions, these procedures target 95% coverage across repeated samples, not a 95% 
+probability for the fixed population gap. Percentile intervals and t-tests need not always agree. 
+
+ 
+Julian Peinado · 1012953314  |  4 
+Q2(f): Median comparison 
+Does the advantage persist for a typical salary? Remote and Hybrid medians are $90,491 and $77,730, a gap of $12,761. 
+Mood’s test counts values above versus at/below the pooled median of $81,870; ties (11 Remote, 5 Hybrid) go below. 
+With Yates correction, χ²(1)=109.1245, p=1.524e-25, rejecting equal medians at 0.05. 
+I bootstrap the median difference 10,000 times at original group sizes. Shifting each group to the pooled median is 
+equivalent to subtracting the observed gap from each simulated gap. There are 0 extreme absolute null gaps; plus-one 
+p=9.999e-05. The 95% Monte Carlo upper bound is 0.0003688. A zero exceedance count identifies the simulation floor, 
+not a precise population tail probability. 
+The two methods agree on the direction of the result despite measuring evidence differently. Mood’s test uses threshold 
+counts and a chi-square approximation; the bootstrap uses dollar-valued gaps and empirical distributions. Because 
+medians are less sensitive to extremes, this agreement shows that the remote advantage is also present at the center of 
+these samples. 
+Q3 Education and salary 
+Q3(a): Population and descriptive statistics 
+Education provides a second perspective. The selected sample contains 5,413 US/Canada respondents; exact Bachelor’s, 
+Master’s and Professional degree labels retain 4,316. B, M and P denote these groups below. Professional is used as 
+supplied, without inferring its qualifications. All salaries in these eligible groups remain. 
+Table 4. US/Canada salaries by degree (USD). 
+Degree n Mean Median SD 
+B 2,954 161,010.57 140,000.00 114,048.10 
+M 1,067 183,133.08 160,000.00 162,860.32 
+P 295 199,595.75 160,000.00 196,280.64 
+The degree means rise from B to P, but are they driven by the upper tail? A separate 1.5×IQR sensitivity check flags 
+151/54/21 salaries, leaving 2,803/1,013/274. Means fall to $142,251.76/$160,662.59/$160,710.76: the P–M gap narrows 
+to just $48.17. Restricted ANOVA remains significant (p=9.382e-16). Thus the broad pattern survives, while the apparent 
+separation of the two higher degree means is sensitive to extreme salaries. 
+Q3(b): Original-data ANOVA 
+To test the overall pattern, H₀: μB=μM=μP is compared with the alternative that at least one mean differs. ANOVA gives 
+F(2, 4,313)=18.7362, p=7.909e-09. The exact reference assumes independence, normal errors and equal variances. A 
+variance ratio of 2.96 and Levene p=1.626e-05 warrant caution; Welch ANOVA also rejects, F(2, 682.27)=12.9764, 
+p=2.944e-06. Neither omnibus result identifies significant pairs. 
+ 
+Julian Peinado · 1012953314  |  5 
+Q3(c): Bootstrap means and pairwise differences 
+The bootstrap reveals why the degree means have unequal precision. Across 10,000 resamples of sizes 2,954/1,067/295 
+(B/M/P), mean SEs are $2,100.56/$5,000.74/$11,546.91. The smaller Professional group is much less precise. Separate 
+streams use seed 16242026; shared group draws preserve dependence between contrasts. Observed B−M, B−P and M−P 
+gaps are −$22,122.51, −$38,585.18 and −$16,462.67. 
+ 
+Figures 7–9 show degree means, pairwise differences and standardized differences as probability densities. Each contrast is centered 
+and scaled using its own bootstrap mean and SD. These plots describe uncertainty; they are neither null distributions nor formal post-
+hoc tests. 
+Q3(d): ANOVA using bootstrapped data 
+ANOVA on the three arrays of 10,000 unshifted bootstrap means gives F(2, 29,997)=69,977.6132; its p-value underflows 
+numerically. Although it rejects, increasing B adds simulations rather than respondents. As in Q2, this calculation supplies 
+no independent confirmation and identifies no significant pair. 
+For a separate test under equal means, I shift each degree group to the combined mean and resample at its original size, 
+preserving empirical variances and shapes. None of 10,000 null F* values reaches the observed statistic: plus -one 
+p=1/10,001=0.000100. This approximate calibration also rejects, but the simulation floor is not a precise tail estimate. No 
+formal post-hoc tests were performed. 
+Conclusions and limitations 
+The evidence tells a consistent but qualified story: remote respondents have higher mean and median pay, and 
+US/Canada degree groups differ overall. Median and sensitivity results show that the remote advantage is not solely an 
+extreme-salary phenomenon; degree-tail sensitivity and unequal bootstrap precision qualify the education ranking. 
+These associations cannot isolate effects of work mode or education from country, occupation and experience. The 
+selected sample is not a verified employed-only population. Self-report, survey selection and uncertain independence 
+limit generalization; bootstrapping cannot repair them. Eight identical rows remain because respondent identities are 
+unverified, and no overall multiplicity correction was applied. 
+AI-use appendix and references 
+OpenAI Codex assisted with analysis, drafting and revision.  
+Sources: supplied CSV and executed notebook; SciPy test documentation and Shalizi, The Bootstrap §5.2.4 (links in 
+notebook). 

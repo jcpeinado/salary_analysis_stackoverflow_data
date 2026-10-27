@@ -1,0 +1,203 @@
+ 
+Page 1 of 5 | MIE1624: Introduction to Data Science, Analytics, and Artificial Intelligence – Assignment 1 
+MIE1624: Introduction to Data Science, Analytics, and AI – Fall 2026 
+ 
+Assignment 1 
+Due Date: 11:59 pm, October 16th, 2026 
+Submit via Quercus 
+Background 
+ 
+For this assignment, you are responsible for answering the questions below based on the dataset provided. 
+You are required to submit (only) two files. The first should be an IPython Notebook (.ipynb file) containing 
+all the code of the analysis you performed to answer the questions. Please ensure that this notebook is not 
+saved in any other formats, such as PDF or HTML. The second file is a 5 -page report (PDF file) in which 
+you will briefly describe what you have done and present the results of your analyses. In your report, you 
+should use visual forms to present your results. Ho w you decide to present your results (i.e., with 
+tables/plots/etc.) is up to you, but your choice should make the results of your analysis clear and obvious. 
+ 
+Dataset 
+ 
+The 2025 Stack Overflow Developer Survey is a report on the state of software development. Now in its 
+fifteenth year, Stack Overflow received over 49,000  responses from developers across 177  countries. The 
+survey covers 62 questions spanning 314 different technologies, with new focus areas on AI agent tools, large 
+language models (LLMs), and community platforms. More information on this survey can be found at:  
+https://survey.stackoverflow.co. 
+ 
+The survey_results_public.csv dataset, available on both the mentioned website and Quercus, contains the 
+survey results. The results from roughly 49,000 participants are shown in multiple columns, representing 
+survey questions. Not all questions are answered by each participant, and responses contain various data types. 
+ 
+The original dataset has been cleaned for you and now contains fewer rows and columns, with rows containing 
+null salaries removed. In the cleaned dataset provided for this assignment ( clean_stackoverflow_data.csv), 
+the second-to-last column (“ConvertedCompYearly”) contains a numerical target variable, the annual salaries 
+of the participants in USD. You should work with the clean dataset for this assignment. 
+ 
+Questions 
+The objective of this assignment is to explore the survey data to understand (1) distinctions between remote 
+and hybrid job modes and (2) the effects of education on income level. The following tasks should be 
+completed: 
+ 
+1. [2 pts] Perform Exploratory Data Analysis (EDA) to analyze the survey dataset and to summarize 
+its main statistical characteristics. Present 3 meaningful figures demonstrating Average Job 
+Satisfaction (last column) by Job Title (“DevType” column), Mean Salary by Job Title, and Annual 
+Salary vs. Age. Analyze each graph for anomalies and provide one sentence of diagnostic 
+interpretation for each figure. 
+ 
+2. [7 pts] Estimating Salary Differences Between Hybrid and Remote Job Modes 
+The job modes are listed in the 14th column of the cleaned dataset (“RemoteWork”). 
+ 
+Page 2 of 5 | MIE1624: Introduction to Data Science, Analytics, and Artificial Intelligence – Assignment 1 
+a. [0.5 pts] Compute and report descriptive statistics for the two groups of hybrid and remote 
+job modes. Remove outliers if necessary and provide your rationale for either keeping or 
+removing them. 
+b. [1.5 pts] Perform a two-sample t-test to compare average salaries between hybrid and remote 
+job modes and report the test results. Explain what exactly your obtained p-value indicates. 
+Note: First, perform a manual calculation using Python to compute the two -sample t -test 
+statistic, including detailed step -by-step calculations of the means, variances, and pooled 
+standard deviation for the two groups. Next, use Python's built-in functions to perform the t-
+test and compare the results with your manual calculations, discussing any discrepancies 
+found between the two methods. You may need to  check whether the assumptions required 
+for the statistical testing are satisfied. 
+c. [2 pts] Bootstrap your data for comparing the mean salary for the two groups  of hybrid and 
+remote workers. Note that the number of instances you sample from each group should be 
+relative to its size. Use 10,000 replications. Present your findings in three distinct figures: one 
+demonstrating the two bootstrapped distributions (for hybrid and remote job modes), another 
+depicting the distribution of the difference in means, and a third showcasing the standardized 
+distribution of the difference in means. 
+d. [1 pt] Perform a two -sample t -test with a significance level of 0.05 threshold using 
+bootstrapped data. Compare your results with those from 2.b and explain your findings. 
+e. [1 pt] Compute 95% confidence intervals (CIs) for the difference in mean salary between the 
+hybrid and remote job-mode groups using two methods: (a) Formula-Based Approach (e.g., a 
+t–distribution–based method) using the original data. (b) Bootstrap Approach using your 
+previously generated bootstrap data. Finally, compare both sets of confidence intervals and 
+discuss whether they reach the same conclusion about the difference in mean salaries. If they 
+differ, explain possible reasons for these discrepancies. 
+f. [1 pt] In addition to comparing mean salaries, examine the median salaries of the two groups 
+by performing a Mood’s median test. Check if the results from the nonparametric test (i.e., 
+Mood’s p-value) and from bootstrapping (i.e., the two-sided p-value for the difference s in 
+bootstrapped medians) are close to each other. Discuss any notable similarities or differences. 
+ 
+3. [3pts] Select the education level column from the cleaned dataset (“EdLevel”) and repeat steps a 
+to d, but this time use Analysis of Variance (ANOVA) instead of a t -test for hypothesis testing to 
+compare the mean salaries across three education groups: Bachelor’s degree, Master’s degree, and 
+Professional degree.  For the ANOVA, limit your analysis to survey participants from North 
+America (i.e., the US and Canada). [0.5pts for a; 0.5pts for b; 1.5pts for c; 0.5pts for d]. 
+Note: You do not need to perform the ANOVA manually; using a built -in function is sufficient. 
+Additionally, similar to  question 2.c, question 3.c requires you to submit three figures: one 
+demonstrating three bootstrapped distributions, another showing pairwise distribution s of the 
+difference in means, and a third depicting standardized distributions of the difference in means. 
+ 
+ 
+Page 3 of 5 | MIE1624: Introduction to Data Science, Analytics, and Artificial Intelligence – Assignment 1 
+4. [Bonus 2 pts] Client-Facing Interactive Dashboard – note that this bonus can only make up for 
+marks lost on Questions 1-3; it cannot raise your total assignment mark above 12 points 
+Assume you work as a data analyst at a consultancy firm, and the analysis in Questions 1 -3 was 
+commissioned by one of your clients, a technology company reviewing its remote-work and hiring 
+policies. You have completed the analysis, and instead of emailing static figures, you now want to 
+send the client a single link to a professional dashboard that presents your findings. With the help 
+of an LLM of your choice (e.g., Claude, ChatGPT)  or a multi-agentic coding framework of your 
+choice (Claude Code, OpenAI Codex, Cursor, etc.), build a visual, preferably interactive, 
+dashboard that contains all of the figures and answers requested in this assignment: the three EDA 
+figures, the descriptive statistics, the manual and built -in t -test results, the bootstrapped 
+distributions and confidence intervals, the Mood's median test comparison, and the full ANOVA 
+analysis for education level. Any mismatch between the dashboard and your notebook will result 
+in no bonus marks. Organize the dashboard so that a non -technical client can follow it: open with 
+a short executive summary of the key takeaways, then walk through each result with a plain -
+language explanation of what it means for the client. You are encouraged to be creative and may 
+ask the LLM to add further insightful views beyond those required. You may deliver the dashboard 
+in any form that supports sharing by link, such as a published Claude artifact, a standalone HTML 
+page, or a Streamlit, Dash, or Hugging Face Spaces app. Include the public link on the first page 
+of your report, and make sure it opens and works correctly without a login, in a private/incognito 
+browser window, and remains  accessible until final grades are released. A link that is broken, 
+private, or requires an account to view will not be graded. Because the dashboard is public, embed 
+only aggregated results or the summary data needed for your figures rather than the full dataset. 
+The dashboard does not count toward the 5 -page report limit. Note that Questions 1 -3 are worth 
+12 pts in total. Bonus Question 4 is worth up to 2 additional points, but these can only offset points 
+lost in Questions 1-3, and your final assignment mark is capped at 12 pts regardless of the bonus. 
+ 
+Submission 
+ 
+1) Produce a 5-page report (including figures) explaining your response to each question for the given 
+dataset and detailing the analysis you performed.  
+Note: The report submission is strictly limited to 5 pages, including  figures, explanations, and all other 
+content. While this may seem challenging, part of this exercise is to cultivate the skill of presenting complex 
+information concisely and clearly.  
+ 
+2) Produce a  Jupyter ( IPython) Notebook detailing the analysis you performed to answer the 
+questions for the given dataset. 
+ 
+What to submit 
+ 
+1. Submit via Quercus a Jupyter (IPython) notebook containing your implementation and motivation 
+for all the steps of the analysis with the following naming convention:  
+lastname_studentnumber_assignment1.ipynb.  
+ 
+Make sure that you comment on your code appropriately and describe each step in sufficient detail. 
+Respect the above convention when naming your file, making sure that all letters are lowercase, 
+and underscores are used as shown. A program that cannot be evaluated because it varies from 
+ 
+Page 4 of 5 | MIE1624: Introduction to Data Science, Analytics, and Artificial Intelligence – Assignment 1 
+specifications will receive zero marks. Also, to receive the marks, your code must run without 
+errors. 
+ 
+2. Submit a report in PDF , including the findings from your analysis. Use the following naming 
+conventions lastname_studentnumber_assignment1.pdf. Page size: US Letter (8.5”x11”),       
+1-inch margin, font size: 11 pt. 
+ 
+Late submissions will receive a standard penalty: 
+● up to one hour late - no penalty 
+● one day late - 15% penalty 
+● two days late - 30% penalty 
+● three days late - 45% penalty 
+● more than three days late - 0 mark 
+ 
+Tools 
+● Software: 
+○ Python Version 3.X is required for this assignment. All libraries are allowed but here is a 
+list of the major libraries you might consider: Numpy, Scipy, Sklearn, Matplotlib, Pandas. 
+Specify 
+ `!pip install <library_name> ` commands in the first cell of your 
+notebook for all the 3 rd party libraries you use.  Make sure your Jupyter notebook 
+runs in Google Colab. 
+○ No other tool or software besides Python and its component libraries can be used to touch 
+the data files. For instance, using Microsoft Excel to clean the data is NOT allowed. 
+○ Read the required data file from the same directory as your notebook: for example, 
+pd.read_csv("clean_stackoverflow_data.csv"). 
+ 
+● Required data files: 
+○ clean_stackoverflow_data.csv: survey responses with yearly compensation. 
+○ The data file cannot be altered by any means. The Jupyter notebook will be run using a 
+local version of this data file. Do not save anything to file within the notebook and read it 
+back. 
+ 
+Other requirements 
+ 
+1. You may decide to complete parts of this assignment through an LLM such as ChatGPT, Claude, 
+Gemini, etc. Similarly, you may use multi-agent coding systems such as Claude Code, OpenAI 
+Code, Gemini CLI, Copilot, and Cursor to generate Python code and the report. In that case, in the 
+appendix of your report, reference which LLM(s) and/or multi-agentic system(s) you have utilized 
+and provide samples of the prompts you used to elicit answers, code, and report with suggested 
+figures. If the LLM’s initial responses contained errors or required verification, explain how you 
+validated and corrected those (reflect on how prompt engineering and iterative feedback helped 
+improve the final output). 
+ 
+2. A large portion of marks is allocated to analysis and justification. Full marks will not be given for 
+code alone. 
+ 
+Page 5 of 5 | MIE1624: Introduction to Data Science, Analytics, and Artificial Intelligence – Assignment 1 
+ 
+3. Output must be shown and readable in the notebook. The only files that can be read into the 
+notebook are those posted for the assignment, without modification. All work must be done within 
+the notebook. 
+ 
+4. The notebook should be presentable; do not show large amounts of raw output. 
+ 
+5. Ensure the code runs in full before submitting. Just before you submit, rerun the entire notebook 
+(navigate to Kernel => Restart Kernel and Run all Cells). Ensure that there are no errors. 
+ 
+ 
+ 
+“The highest activity a human being can attain is learning for understanding, because to understand is to be free.”  
+― Baruch Spinoza 
+ 
+Best of Luck! 

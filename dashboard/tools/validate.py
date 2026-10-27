@@ -21,8 +21,8 @@ for name,c in d['charts'].items():
   if 'standardized' in name:close(series['mean'],0);close(series['sd'],1)
 a=d['charts']['age'];assert all(v==0 or v>=5 for row in a['counts'] for v in row)
 assert sum(map(sum,a['counts']))+a['suppressed_observations']==m['rows']-m['missing_age']
-assert len(T['satisfaction_by_title'])==len(T['salary_by_title'])==32
-assert {p.name for p in (ROOT/'dist').iterdir()}=={'index.html','app.js','styles.css','summary.json'}
+assert len(T['satisfaction_by_title'])==len(T['salary_by_title'])==31
+assert {p.name for p in (ROOT/'dist').iterdir()}=={'index.html','app.js','styles.css','summary.json','vendor','figures'}
 h=(ROOT/'dist/index.html').read_text(encoding='utf8')
 embedded=re.search(r'<script id="dashboard-data" type="application/json">(.*?)</script>',h,re.S)
 assert embedded and json.loads(embedded.group(1))==d, 'Embedded summary must match the verified source'
@@ -30,4 +30,11 @@ for n in range(1,10):assert f'Figure {n} ' in h
 for q in ['q2a','q2b','q2c','q2d','q2e','q2f','q3a','q3b','q3c','q3d']:assert f'id="{q}"' in h
 assert not re.search(r'<script[^>]+src=["\']https?://',h)
 assert not any(p.suffix in ['.csv','.ipynb','.env'] for p in (ROOT/'dist').rglob('*'))
-print('PASS: source identities, counts, p-values, interval widths, histogram normalization, standardization, age suppression, nine figures, all subsections, four-file public allowlist.')
+print('PASS: source identities, counts, p-values, interval widths, histogram normalization, standardization, age suppression, nine figures, all subsections, 14-file public allowlist.')
+
+assert (m['original_n'],m['retired_n'],m['over_80_n'],m['overlap_n'],m['rows'])==(20407,2,93,0,20312)
+assert (s['n_remote'],s['n_hybrid'],s['total_n'])==(6888,7776,4316)
+assert all((ROOT/f'dist/figures/figure-{i}.png').is_file() for i in range(1,10))
+assert (ROOT/'dist/vendor/plotly.min.js').stat().st_size>1000000
+assert len(list((ROOT/'dist').rglob('*.*')))==14
+print('PASS: current selection, group counts, original figures, bundled Plotly, aggregate-only file allowlist.')

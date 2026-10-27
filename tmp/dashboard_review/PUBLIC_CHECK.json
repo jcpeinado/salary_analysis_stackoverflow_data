@@ -1,0 +1,72 @@
+[
+  {
+    "asset": "app.js",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "index.html",
+    "status": 200,
+    "same_bytes": false
+  },
+  {
+    "asset": "styles.css",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "summary.json",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-1.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-2.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-3.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-4.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-5.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-6.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-7.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-8.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "figures/figure-9.png",
+    "status": 200,
+    "same_bytes": true
+  },
+  {
+    "asset": "vendor/plotly.min.js",
+    "status": 200,
+    "same_bytes": true
+  }
+]

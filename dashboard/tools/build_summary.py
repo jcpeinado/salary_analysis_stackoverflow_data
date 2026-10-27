@@ -31,7 +31,7 @@ def plain(x):
 def frame(df):
  df=df.copy();df.index.name='Group'
  return plain(df.reset_index().to_dict(orient='records'))
-table_names=['q2_descriptives','q2_outliers','q2_sensitivity','q2_t_comparison','q2_cis','q2_median_tests','contingency','q3_descriptives','q3_outliers','q3_sensitivity','q3_mean_tests','q3_anova_results','satisfaction_by_title','salary_by_title','sat_sensitivity']
+table_names=['selection_flow','employment_audit','q2_boot_summary', 'q2_descriptives','q2_outliers','q2_sensitivity','q2_t_comparison','q2_cis','q2_median_tests','contingency','q3_descriptives','q3_outliers','q3_sensitivity','q3_mean_tests','q3_anova_results','satisfaction_by_title','salary_by_title','sat_sensitivity']
 tables={name:frame(ns[name]) for name in table_names if name in ns}
 scalars={k:plain(v) for k,v in ns.items() if isinstance(v,(int,float,np.integer,np.floating)) and k not in ['i','observed','direct_t','direct_f','draw_sp2','shortcut_t','direct_median_gap','check_grand','check_within','shortcut_f']}
 tests={}
@@ -55,18 +55,34 @@ charts={
  'q3means':hist({k:ns['education_boot'][k]['mean'] for k in ns['education_labels']},1000),
  'q3differences':hist(ns['education_differences'],1000),
  'q3standardized':hist(ns['education_standardized'])}
-ages=ns['age_salary_data'];xe=np.arange(0,161,5);ye=np.arange(2,8.01,.25)
+ages=ns['age_salary_data'];xe=np.arange(0,86,5);ye=np.arange(2,8.01,.25)
 counts,_,_=np.histogram2d(ages.Age,np.log10(ages[ns['SALARY']]),bins=[xe,ye])
 assert int(counts.sum())==len(ages)
 suppressed=int(counts[counts<5].sum());counts[counts<5]=0
 charts['age']={'age_edges':xe.tolist(),'log_salary_edges':ye.tolist(),'counts':counts.astype(int).tolist(),'minimum_cell_count':5,'suppressed_observations':suppressed,'plotted_observations':int(counts.sum()),'nonmissing_observations':len(ages)}
-meta={'rows':len(ns['survey']),'columns':len(ns['survey'].columns),'countries':ns['survey'].Country.nunique(),'missing_satisfaction':int(ns['survey'].JobSat.isna().sum()),'invalid_satisfaction':int(ns['satisfaction_invalid'].sum()),'missing_age':int(ns['survey'].Age.isna().sum()),'flagged_age':int(ns['age_suspect'].sum()),'duplicates':int(ns['survey'].duplicated().sum()),'salary_min':float(ns['survey'][ns['SALARY']].min()),'salary_max':float(ns['survey'][ns['SALARY']].max()),'salary_mean':float(ns['survey'][ns['SALARY']].mean()),'salary_median':float(ns['survey'][ns['SALARY']].median()),'q3_country_count':int(ns['survey'].Country.isin(ns['north_america']).sum()),'seed':ns['SEED'],'replications':ns['B'],'alpha':ns['ALPHA'],'salary_unit':'Annual USD','input_sha256':before[str(data)],'notebook_sha256':before[str(nbpath)],'verified_date':'2026-10-12'}
+meta={'rows':len(ns['survey']),'columns':len(ns['survey'].columns),'countries':ns['survey'].Country.nunique(),'missing_satisfaction':int(ns['survey'].JobSat.isna().sum()),'invalid_satisfaction':int(ns['satisfaction_invalid'].sum()),'missing_age':int(ns['survey'].Age.isna().sum()),'flagged_age':int(ns['age_suspect'].sum()),'duplicates':int(ns['survey'].duplicated().sum()),'salary_min':float(ns['survey'][ns['SALARY']].min()),'salary_max':float(ns['survey'][ns['SALARY']].max()),'salary_mean':float(ns['survey'][ns['SALARY']].mean()),'salary_median':float(ns['survey'][ns['SALARY']].median()),'q3_country_count':int(ns['survey'].Country.isin(ns['north_america']).sum()),'seed':ns['SEED'],'replications':ns['B'],'alpha':ns['ALPHA'],'salary_unit':'Annual USD','input_sha256':before[str(data)],'notebook_sha256':before[str(nbpath)],'verified_date':'2026-10-15','report_sha256':hashlib.sha256((ROOT/'reports/Julian_Peinado_1012953314_assignment1.pdf').read_bytes()).hexdigest(),'original_n':ns['original_n'],'retired_n':ns['retired_n'],'over_80_n':ns['over_80_n'],'overlap_n':ns['overlap_n'],'age80_n':int(ns['survey'].Age.eq(80).sum()),'employment_indicator_n':ns['employment_indicator_n']}
 extra={'manual_steps':plain(ns['manual_steps'].to_dict()),'median_ties':{'Remote':int((ns['remote']==ns['mood'].median).sum()),'Hybrid':int((ns['hybrid']==ns['mood'].median).sum())},'education_labels':ns['education_labels'],'countries':ns['north_america'],'pair_differences':plain(ns['observed_pair_differences']),'diagnostics':[ns[f'q1_diagnostic_{i}'].replace('\\$','$') for i in [1,2,3]],'median_expected_min':float(ns['expected_counts'].min())}
 result=plain({'meta':meta,'scalars':scalars,'tables':tables,'tests':tests,'charts':charts,'extra':extra})
 (OUT/'summary.json').write_text(json.dumps(result,ensure_ascii=False,allow_nan=False,indent=2),encoding='utf8')
 assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==sha for p,sha in before.items())
-assert len(charts)==7 and len(tables['salary_by_title'])==32
+assert len(charts)==7 and len(tables['salary_by_title'])==31
 assert abs(scalars['manual_p']-tests['student']['pvalue'])<1e-12
 assert len(charts['q3differences']['series'])==3
-print('PASS: notebook calculations and assertions; all histogram totals; 32 titles; original files unchanged; only aggregates exported.')
+print('PASS: notebook calculations and assertions; all histogram totals; 31 titles; original files unchanged; only aggregates exported.')
 print('Tables:',list(tables));print('Tests:',list(tests));print('Scalars:',list(scalars))
+
+import base64
+figdir=OUT/'figures';figdir.mkdir(exist_ok=True)
+figure_count=0
+for cell in nb['cells']:
+ for output in cell.get('outputs',[]):
+  png=output.get('data',{}).get('image/png')
+  if png:
+   figure_count+=1
+   (figdir/f'figure-{figure_count}.png').write_bytes(base64.b64decode(''.join(png) if isinstance(png,list) else png))
+assert figure_count==9
+# Compare canonical full-precision calculations with the notebook's saved result narrative.
+outputs='\n'.join(str(o.get('data',{}).get('text/markdown','')) for c in nb['cells'] for o in c.get('outputs',[]))
+for value in [f"{ns['mean_difference']:,.2f}",f"{ns['n_remote']:,}",f"{ns['n_hybrid']:,}",f"{ns['anova'].statistic:.4f}"]:
+ assert value in outputs, ('Saved notebook output mismatch',value)
+print('PASS: saved notebook narrative matches execution; nine exact embedded figures exported.')
